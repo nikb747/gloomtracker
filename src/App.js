@@ -1,18 +1,35 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import CampaignForm from './CampaignForm';
 import './App.css';
 
 class App extends Component {
+  state = {
+    nextCampaignId: 0,
+    campaigns: [],
+  }
+  renderCampaignList = () => {
+    return this.state.campaigns.map(campaign => (<li>{campaign.partyName}</li>));
+  }
+  addNewCampaign = (aCampaign) => {
+    const campaigns = this.state.campaigns;
+    const newCampaign = {
+      ...aCampaign,
+      id: this.state.nextCampaignId,
+    }
+    this.setState({
+      campaigns: [...campaigns, newCampaign],
+      nextCampaignId: this.state.nextCampaignId + 1,
+    })
+    return newCampaign;
+  }
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <h1>Gloomtracker</h1>
+        <ul>
+          {this.renderCampaignList()}
+        </ul>
+        <CampaignForm onSave={this.addNewCampaign} campaign={null}/>
       </div>
     );
   }
